@@ -33,7 +33,6 @@ def login():
             return redirect(url_for('submit'))
         else:
             return render_template('login.html', message='Número de matrícula não encontrado.')
-            # return redirect(url_for('login'))
 
     return render_template('login.html')
 
@@ -43,18 +42,22 @@ def logout():
     session.pop('user_nome', None)
     return redirect(url_for('login'))
 
-@app.route('/exercicios')
-def index():
-    return render_template('exercicios.html', lista=['a', 'b', 'c'])
+# @app.route('/exercicios')
+# def index():
+#     return render_template('exercicios.html', lista=['a', 'b', 'c'])
 
 @app.route('/ranking')
 def ranking():
-    return render_template('ranking.html', lista=['a', 'b', 'c'])
+    df = pd.read_csv('respostas.csv')
+    return render_template('ranking.html', lista=df.groupby(['matricula', 'exercicio']).max().sort_values('exercicio').values.tolist())
+
+@app.route('/leaderboard')
+def leaderboard():
+    df = pd.read_csv('respostas.csv')
+    return render_template('leaderboard.html', lista=df.groupby(['matricula', 'exercicio']).max().sort_values('nome').values.tolist())
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
-    # exercicio = request.args.get('exercicio')
-    # print(exercicio)
     if request.method == 'POST':
          # check if the post request has the file part
         if 'file' not in request.files:
@@ -83,18 +86,23 @@ def submit():
                 if output == 'Hello World, Henrique Dezani':
                     with open('respostas.csv', 'at') as file_out:
                         escritor = csv.writer(file_out)
-                        escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),1,1])
+                        escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
                     
                     return render_template('sucesso.html', nome=session['user_nome'], output=output)
                 else:
+                    with open('respostas.csv', 'at') as file_out:
+                        escritor = csv.writer(file_out)
+                        escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
                     return render_template('falha.html', nome=session['user_nome'], output=output)
 
             except subprocess.CalledProcessError as ex:
                 return render_template('erro.html', nome=session['user_nome'], output=str(ex.output))
             except subprocess.TimeoutExpired:
-                return render_template('timeout.html', nome=session['user_nome'], output=str(ex.output))
+                return render_template('timeout.html', nome=session['user_nome'])
 
-    return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'])
+    df = pd.read_csv('respostas.csv')
+    df_aluno = df[df['matricula'] == int(session['user_matricula'])].groupby(['exercicio']).max().sort_values('exercicio')
+    return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
     app.run(debug=True, port=3001)

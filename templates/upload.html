@@ -23,7 +23,13 @@
     </div>
         <div class="form-group">
             <label>Número do Exercício</label>
-            <input type=number name=exercicio class=form-control required=true>
+            <select class='form-control' name=exercicio required=true>
+                <option value='1'>Exercício 1</option>
+                <option value='2'>Exercício 2</option>
+                <option value='3'>Exercício 3</option>
+                <option value='4'>Exercício 4</option>
+                <option value='5'>Exercício 5</option>
+            </select>
         </div>
         
         <div class="form-group">
@@ -32,7 +38,28 @@
         </div>
         <br/>
         <input type=submit class='btn btn-primary' value=Upload>
+        <br/><br/>
+        <h4>Histórico</h4>
+        <table class="table table-hover">
+            <tr>
+                <th>Exercício</th>
+                <th>Pontos</th>
+            </tr>
+            {% for item in lista %}
+            <tr>
+                <td>{{item[4]}}</td>
+                <td>{{item[3]}}</td>
+            </tr>
+            {% endfor %}
+
+            <tr>
+                <td style='text-align: right; font-weight: bold'>TOTAL</td>
+                <td>{{total}}</td>
+            </tr>
+        </table>
+
         <a href='/logout' class='btn btn-danger'>Sair</a>
+
     </form>
 </div>
 </BODY>
