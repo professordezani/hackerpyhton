@@ -1,0 +1,40 @@
+<!doctype html>
+<HTML>
+
+<HEAD>
+    <title>Envio do exercício</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+</HEAD>
+
+<BODY>
+    <div class=container>
+        <h2>Submissão do exercício</h2>
+    <form action='/submit' method=post enctype=multipart/form-data>
+        <div class="row">
+        <div class="form-group col-6">
+            <label>Número da matrícula</label>
+            <input type=input class=form-control required=true value={{matricula}} readonly>
+        </div>
+        
+        <div class="form-group col-6">
+            <label>Nome do aluno</label>
+            <input type=input class=form-control required=true value="{{nome}}" readonly>
+        </div>
+    </div>
+        <div class="form-group">
+            <label>Número do Exercício</label>
+            <input type=number name=exercicio class=form-control required=true>
+        </div>
+        
+        <div class="form-group">
+            <label>Arquivo Python (.py)</label>
+            <input type=file name=file class=form-control required=true>
+        </div>
+        <br/>
+        <input type=submit class='btn btn-primary' value=Upload>
+        <a href='/logout' class='btn btn-danger'>Sair</a>
+    </form>
+</div>
+</BODY>
+
+</HTML>
