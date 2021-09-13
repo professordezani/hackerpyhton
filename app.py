@@ -1,11 +1,8 @@
 from flask import Flask, flash, request, redirect, url_for, render_template, session
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 import os
-import subprocess, shlex
-import sys
-import traceback
+import subprocess
 import datetime
-import tempfile
 import pandas as pd
 import csv
 
@@ -42,10 +39,6 @@ def logout():
     session.pop('user_nome', None)
     return redirect(url_for('login'))
 
-# @app.route('/exercicios')
-# def index():
-#     return render_template('exercicios.html', lista=['a', 'b', 'c'])
-
 @app.route('/ranking')
 def ranking():
     df = pd.read_csv('respostas.csv')
@@ -72,8 +65,8 @@ def submit():
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            # filename = secure_filename(file.filename)
+            path = os.path.join(app.config['UPLOAD_FOLDER'], f"{session['user_matricula']}_{request.form['exercicio']}_{datetime.datetime.now().timestamp()}.py")
             print(path)
             file.save(path)
 
@@ -105,4 +98,4 @@ def submit():
     return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3001)
+    app.run(debug=True) #, port=3001)
