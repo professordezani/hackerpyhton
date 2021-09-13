@@ -15,6 +15,12 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+respostas = {
+    1: 'Hello World, Henrique Dezani',
+    2: 120,
+    3: [1, 2, 3, 5]
+}
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -71,22 +77,25 @@ def submit():
             file.save(path)
 
 
-            command = f"python3 {path} < hello.txt"
+            command = f"python3 {path} < exercicio{int(request.form['exercicio'])}.txt"
             timeoutSeconds = 5
             try:
                 output = subprocess.check_output(command, shell=True, timeout=timeoutSeconds, universal_newlines=True, stderr=subprocess.STDOUT, )
-                print(output)
-                if output == 'Hello World, Henrique Dezani':
+                # print(output)
+
+                answer = respostas[int(request.form['exercicio'])]
+                
+                if output == str(answer):
                     with open('respostas.csv', 'at') as file_out:
                         escritor = csv.writer(file_out)
                         escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
                     
-                    return render_template('sucesso.html', nome=session['user_nome'], output=output)
+                    return render_template('sucesso.html', nome=session['user_nome'], output=output, expected=answer)
                 else:
                     with open('respostas.csv', 'at') as file_out:
                         escritor = csv.writer(file_out)
                         escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
-                    return render_template('falha.html', nome=session['user_nome'], output=output)
+                    return render_template('falha.html', nome=session['user_nome'], output=output, expected=answer)
 
             except subprocess.CalledProcessError as ex:
                 return render_template('erro.html', nome=session['user_nome'], output=str(ex.output))
@@ -98,4 +107,4 @@ def submit():
     return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80) #debug=True) #, port=3001)
+    app.run(host='0.0.0.0', port=8080) #debug=True) #, port=3001)
