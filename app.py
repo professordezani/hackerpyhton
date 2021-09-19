@@ -1,3 +1,4 @@
+from re import sub
 from flask import Flask, flash, request, redirect, url_for, render_template, session
 # from werkzeug.utils import secure_filename
 import os
@@ -15,11 +16,17 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-respostas = {
-    1: 'Hello World, Henrique Dezani',
-    2: 120,
-    3: [1, 2, 3, 5]
+exercicios = {
+    1: {
+        "outputs": ["Hello World, Henrique Dezani\n", "Hello World, Gabriel Henrique\n"]
+    }
 }
+
+# respostas = {
+#     1: {1: 'Hello World, Henrique Dezani', 2: 'Hello World, Fulano da Silva'},
+#     2: 120,
+#     3: [1, 2, 3, 5]
+# }
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -76,35 +83,44 @@ def submit():
             print(path)
             file.save(path)
 
+            for i in range(2):
 
-            command = f"python3 {path} < exercicio{int(request.form['exercicio'])}.txt"
-            timeoutSeconds = 5
-            try:
-                output = subprocess.check_output(command, shell=True, timeout=timeoutSeconds, universal_newlines=True, stderr=subprocess.STDOUT, )
-                # print(output)
+                command = f"python3 {path} < exercicio{int(request.form['exercicio'])}-{i}.txt"
 
-                answer = respostas[int(request.form['exercicio'])]
-                
-                if output == str(answer):
-                    with open('respostas.csv', 'at') as file_out:
-                        escritor = csv.writer(file_out)
-                        escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
+                # command = f"python3 {path} "
+
+                # for param in exercicios[int(request.form['exercicio'])]["inputs"]:
+                #     command += f"<<< {param} <<< 'Dezani'"
+
+                # print(command)
+                timeoutSeconds = 5
+                try:
+                    output = subprocess.check_output(command, shell=True, timeout=timeoutSeconds, universal_newlines=True, stderr=subprocess.STDOUT)
+                    print(output)
+
+                    answer = exercicios[int(request.form['exercicio'])]["output"][i]
+                    print(answer)
                     
-                    return render_template('sucesso.html', nome=session['user_nome'], output=output, expected=answer)
-                else:
-                    with open('respostas.csv', 'at') as file_out:
-                        escritor = csv.writer(file_out)
-                        escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
-                    return render_template('falha.html', nome=session['user_nome'], output=output, expected=answer)
+                    if output == str(answer):
+                        with open('respostas.csv', 'at') as file_out:
+                            escritor = csv.writer(file_out)
+                            escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
+                        
+                        return render_template('sucesso.html', nome=session['user_nome'], output=output, expected=answer)
+                    else:
+                        with open('respostas.csv', 'at') as file_out:
+                            escritor = csv.writer(file_out)
+                            escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
+                        return render_template('falha.html', nome=session['user_nome'], output=output, expected=answer)
 
-            except subprocess.CalledProcessError as ex:
-                return render_template('erro.html', nome=session['user_nome'], output=str(ex.output))
-            except subprocess.TimeoutExpired:
-                return render_template('timeout.html', nome=session['user_nome'])
+                except subprocess.CalledProcessError as ex:
+                    return render_template('erro.html', nome=session['user_nome'], output=str(ex.output))
+                except subprocess.TimeoutExpired:
+                    return render_template('timeout.html', nome=session['user_nome'])
 
     df = pd.read_csv('respostas.csv')
     df_aluno = df[df['matricula'] == int(session['user_matricula'])].groupby(['exercicio']).max().sort_values('exercicio')
     return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080) #debug=True) #, port=3001)
+    app.run(host='0.0.0.0', port=8081, debug=True) #, port=3001)
