@@ -18,7 +18,20 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 exercicios = {
     1: {
-        "outputs": ["Hello World, Henrique Dezani\n", "Hello World, Gabriel Henrique\n"]
+        "outputs": [
+            "Hello World, Henrique Dezani\n", 
+            "Hello World, Gabriel Dezani\n", 
+            "Hello World, Thalita Alvarenga\n", 
+            "Hello World, Adriana Alvarenga\n", 
+            "Hello World, Gabriel Alvarenga\n"]
+    },
+    2: {
+        "outputs": [
+            "1\n", 
+            "2\n", 
+            "6\n", 
+            "24\n", 
+            "120\n"]
     }
 }
 
@@ -52,15 +65,19 @@ def logout():
     session.pop('user_nome', None)
     return redirect(url_for('login'))
 
-@app.route('/ranking')
+@app.route('/dashboard')
 def ranking():
     df = pd.read_csv('respostas.csv')
-    return render_template('ranking.html', lista=df.groupby(['matricula', 'exercicio']).max().sort_values('exercicio').values.tolist())
+    return render_template('dashboard.html', lista=df.groupby(['matricula', 'exercicio']).max().sort_values('exercicio').values.tolist())
 
 @app.route('/leaderboard')
 def leaderboard():
     df = pd.read_csv('respostas.csv')
-    return render_template('leaderboard.html', lista=df.groupby(['matricula', 'exercicio']).max().sort_values('nome').values.tolist())
+    df_max = df.groupby(['matricula', 'exercicio']).max()
+    print(df_max.head())
+    df_sum = df_max.groupby(['nome']).sum()
+    print(df_sum)
+    return render_template('leaderboard.html', lista=df_sum.sort_values('pontos', ascending=False))
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
@@ -80,10 +97,14 @@ def submit():
         if file and allowed_file(file.filename):
             # filename = secure_filename(file.filename)
             path = os.path.join(app.config['UPLOAD_FOLDER'], f"{session['user_matricula']}_{request.form['exercicio']}_{datetime.datetime.now().timestamp()}.py")
-            print(path)
+            # print(path)
             file.save(path)
 
-            for i in range(2):
+            outputs = []
+            expecteds = []
+            corrects = []
+
+            for i in range(5):
 
                 command = f"python3 {path} < exercicio{int(request.form['exercicio'])}-{i}.txt"
 
@@ -92,35 +113,48 @@ def submit():
                 # for param in exercicios[int(request.form['exercicio'])]["inputs"]:
                 #     command += f"<<< {param} <<< 'Dezani'"
 
-                # print(command)
+                print(command)
                 timeoutSeconds = 5
+                
                 try:
                     output = subprocess.check_output(command, shell=True, timeout=timeoutSeconds, universal_newlines=True, stderr=subprocess.STDOUT)
                     print(output)
+                    outputs.append(output)
 
-                    answer = exercicios[int(request.form['exercicio'])]["output"][i]
-                    print(answer)
+                    answer = exercicios[int(request.form['exercicio'])]["outputs"][i]
+                    # print(answer)
+                    expecteds.append(answer)
                     
                     if output == str(answer):
-                        with open('respostas.csv', 'at') as file_out:
-                            escritor = csv.writer(file_out)
-                            escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
-                        
-                        return render_template('sucesso.html', nome=session['user_nome'], output=output, expected=answer)
+                        corrects.append(True)
                     else:
-                        with open('respostas.csv', 'at') as file_out:
-                            escritor = csv.writer(file_out)
-                            escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
-                        return render_template('falha.html', nome=session['user_nome'], output=output, expected=answer)
-
+                        corrects.append(False)
+                
                 except subprocess.CalledProcessError as ex:
                     return render_template('erro.html', nome=session['user_nome'], output=str(ex.output))
                 except subprocess.TimeoutExpired:
                     return render_template('timeout.html', nome=session['user_nome'])
+
+            if sum(corrects) == 5:
+                with open('respostas.csv', 'at') as file_out:
+                    escritor = csv.writer(file_out)
+                    escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
+            
+                print(corrects)
+                return render_template('sucesso.html', nome=session['user_nome'], outputs=outputs, expecteds=expecteds, corrects=corrects)
+
+            else:
+                with open('respostas.csv', 'at') as file_out:
+                    escritor = csv.writer(file_out)
+                    escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
+                
+                print(corrects)
+                return render_template('falha.html', nome=session['user_nome'], outputs=outputs, expecteds=expecteds, corrects=corrects)
+
 
     df = pd.read_csv('respostas.csv')
     df_aluno = df[df['matricula'] == int(session['user_matricula'])].groupby(['exercicio']).max().sort_values('exercicio')
     return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8081, debug=True) #, port=3001)
+    app.run(host='0.0.0.0', port=8080) #, port=3001)

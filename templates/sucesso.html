@@ -11,14 +11,25 @@
 
         <h3>Parabéns {{nome}}!</h3>
 
-        <br/>Expected 
-        <pre style="background-color:seashell; padding: 20px;">{{expected}}</pre>
+        {% for i in range(5) %}
+        <br/>
+        <h4>Teste {{i+1}}</h4>
+
+        
+        {% if i < 3 %}
+        Expected 
+        <pre style="background-color:seashell; padding: 20px;">{{expecteds[i]}}</pre>
             
-        <br/>Output: 
-        <pre style="background-color: rgb(223, 243, 224); padding: 20px;">{{output}}</pre>       
+        Output: 
+        <pre style="background-color: rgb(223, 243, 224); padding: 20px;">{{outputs[i]}}</pre>
+        {% else %}
+        <pre style="background-color: rgb(223, 243, 224); padding: 20px; font-style: italic;">Resposta correta, mas oculta para o aluno.</pre>
+        {% endif %}
+        {% endfor %}               
 
 
         <a href='/submit' class="btn btn-primary">Voltar</a>
+        <br/>
 
     </div>
 

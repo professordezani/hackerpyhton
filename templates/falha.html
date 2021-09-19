@@ -8,16 +8,42 @@
 <body>
 
     <div class="container">
-    <h3>Não desanime {{nome}}!</h3>
 
-    <br/>Expected 
-    <pre style="background-color:seashell; padding: 20px;">{{expected}}</pre>
+        <h3>Não desanime, {{nome}}!</h3>
+
+        {% for i in range(5) %}
+        <br/>
+        <h4>Teste {{i+1}}</h4>
+
         
-    <br/>Output: 
-    <pre style="background-color: rgb(247, 201, 201); padding: 20px;">{{output}}</pre>       
+            {% if i < 3 %}
+                Expected 
+                <pre style="background-color:seashell; padding: 20px;">{{expecteds[i]}}</pre>
+                    
+                Output: 
+                {% if corrects[i] %}
+                <pre style="background-color: rgb(223, 243, 224); padding: 20px;">{{ corrects[i]}} {{outputs[i]}}</pre>
+                {% else %}
+                <pre style="background-color: rgb(247, 201, 201); padding: 20px;">{{outputs[i]}}</pre>
+                {% endif %}
+
+            {% else %}
+                {% if corrects[i] %}
+                <pre style="background-color: rgb(223, 243, 224); padding: 20px; font-style: italic;">Resposta correta, mas oculta para o aluno.</pre>
+                {% else %}
+                <pre style="background-color: rgb(247, 201, 201); padding: 20px; font-style: italic;">Resposta incorreta, mas oculta para o aluno.</pre>
+                {% endif %}
+
+            {% endif %}
+
+        {% endfor %}               
 
 
-    <a href='/submit' class="btn btn-primary">Voltar</a>
+        <a href='/submit' class="btn btn-primary">Voltar</a>
+        <br/>
+
+    </div>
+
 </div>
 
 </body>
