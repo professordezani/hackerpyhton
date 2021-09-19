@@ -16,30 +16,51 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# exercicios = {
+#     1: {
+#         "outputs": [
+#             "Hello World, Henrique Dezani\n", 
+#             "Hello World, Gabriel Dezani\n", 
+#             "Hello World, Thalita Alvarenga\n", 
+#             "Hello World, Adriana Alvarenga\n", 
+#             "Hello World, Gabriel Alvarenga\n"]
+#     },
+#     2: {
+#         "outputs": [
+#             "1\n", 
+#             "2\n", 
+#             "6\n", 
+#             "24\n", 
+#             "120\n"]
+#     }
+# }
+
 exercicios = {
     1: {
         "outputs": [
-            "Hello World, Henrique Dezani\n", 
-            "Hello World, Gabriel Dezani\n", 
-            "Hello World, Thalita Alvarenga\n", 
-            "Hello World, Adriana Alvarenga\n", 
-            "Hello World, Gabriel Alvarenga\n"]
+            "120\n", 
+            "2\n", 
+            "6\n", 
+            "3628800\n", 
+            "87178291200\n"]
     },
     2: {
         "outputs": [
-            "1\n", 
-            "2\n", 
-            "6\n", 
-            "24\n", 
-            "120\n"]
+            "0\n1\n4\n9\n16\n", 
+            "0\n1\n4\n9\n", 
+            "0\n1\n4\n", 
+            "0\n1\n4\n9\n16\n25\n36\n49\n64\n81\n100\n121\n144\n", 
+            "0\n"]
+    },
+    3: {
+        "outputs": [
+            "fatec-rio-preto\n", 
+            "o-meu-primeiro-exercício\n", 
+            "blog-da-super-empresa\n", 
+            "como-calcular-o-fatorial-de-um-número\n", 
+            "saiba-mais-sobre-a-linguagem-python\n"]
     }
 }
-
-# respostas = {
-#     1: {1: 'Hello World, Henrique Dezani', 2: 'Hello World, Fulano da Silva'},
-#     2: 120,
-#     3: [1, 2, 3, 5]
-# }
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -113,17 +134,17 @@ def submit():
                 # for param in exercicios[int(request.form['exercicio'])]["inputs"]:
                 #     command += f"<<< {param} <<< 'Dezani'"
 
-                print(command)
+                # print(command)
                 timeoutSeconds = 5
                 
                 try:
                     output = subprocess.check_output(command, shell=True, timeout=timeoutSeconds, universal_newlines=True, stderr=subprocess.STDOUT)
-                    print(output)
+                    # print(output)
                     outputs.append(output)
 
                     answer = exercicios[int(request.form['exercicio'])]["outputs"][i]
                     # print(answer)
-                    expecteds.append(answer)
+                    expecteds.append(answer)                    
                     
                     if output == str(answer):
                         corrects.append(True)
@@ -140,7 +161,7 @@ def submit():
                     escritor = csv.writer(file_out)
                     escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),1,int(request.form['exercicio'])])
             
-                print(corrects)
+                # print(corrects)
                 return render_template('sucesso.html', nome=session['user_nome'], outputs=outputs, expecteds=expecteds, corrects=corrects)
 
             else:
@@ -148,7 +169,7 @@ def submit():
                     escritor = csv.writer(file_out)
                     escritor.writerow([int(session['user_matricula']),session['user_nome'],datetime.datetime.now(),int(request.form['exercicio']),0,int(request.form['exercicio'])])
                 
-                print(corrects)
+                # print(corrects)
                 return render_template('falha.html', nome=session['user_nome'], outputs=outputs, expecteds=expecteds, corrects=corrects)
 
 
@@ -157,4 +178,4 @@ def submit():
     return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080) #, port=3001)
+    app.run(host='0.0.0.0', port=8081) #, port=3001)

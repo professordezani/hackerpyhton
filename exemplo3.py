@@ -1,7 +1,4 @@
-a = int(input())
-b = int(input())
-c = int(input())
-d = int(input())
-lista = [a, b, c, d]
-print(sorted(lista), end='')
-# print(lista.sort(), end='')
+url = input()
+lista = url.split(' ')
+slug = '-'.join([palavra.lower() for palavra in lista if palavra != ''])
+print(slug)
