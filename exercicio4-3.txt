@@ -1,0 +1,6 @@
+5
+anexar 1
+anexar 2
+inserir 1 3
+ordenar
+imprimir

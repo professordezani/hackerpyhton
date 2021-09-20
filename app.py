@@ -59,6 +59,14 @@ exercicios = {
             "blog-da-super-empresa\n", 
             "como-calcular-o-fatorial-de-um-número\n", 
             "saiba-mais-sobre-a-linguagem-python\n"]
+    },
+    4: {
+        "outputs": [
+            "[1, 3, 2]\n", 
+            "[6, 5, 10]\n[1, 5, 9, 10]\n[10, 9, 5, 1]\n", 
+            "[3, 2, 1]\n", 
+            "[1, 2, 3]\n", 
+            "[1, 2]\n[1]\n[]\n"]
     }
 }
 
