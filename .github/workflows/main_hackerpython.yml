@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'hackerpython'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FC6C1FF30084451C8D0504C326450485 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_862B756033644A389A8A3BBC38E8561C }}
