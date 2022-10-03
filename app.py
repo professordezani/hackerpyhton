@@ -186,4 +186,4 @@ def submit():
     return render_template('upload.html', nome=session['user_nome'], matricula=session['user_matricula'], lista=df_aluno.values.tolist(), total=sum(df_aluno['pontos']))
 
 if __name__ == '__main__':
-    app.run() #host='0.0.0.0', port=8081) #, port=3001)
+    app.run(host='0.0.0.0') #, port=8081) #, port=3001)
