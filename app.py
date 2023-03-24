@@ -75,18 +75,19 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        df = pd.read_csv('alunos_lp.csv', sep=';')
-        df_search = df[df['Matricula'] == int(request.form['matricula'])]
-        if len(df_search) > 0:
-            session['user_matricula'] = str(df_search['Matricula'].values[0])
-            session['user_nome'] = df_search['Nome'].values[0]
-            return redirect(url_for('submit'))
-        else:
-            return render_template('login.html', message='Número de matrícula não encontrado.')
-
+def index():
     return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    df = pd.read_csv('alunos_lp.csv', sep=';')
+    df_search = df[df['Matricula'] == int(request.form['matricula'])]
+    if len(df_search) > 0:
+        session['user_matricula'] = str(df_search['Matricula'].values[0])
+        session['user_nome'] = df_search['Nome'].values[0]
+        return redirect(url_for('submit'))
+    else:
+        return render_template('login.html', message='Número de matrícula não encontrado.')
 
 @app.route('/logout')
 def logout():
