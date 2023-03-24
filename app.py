@@ -35,6 +35,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #     }
 # }
 
+host_path = 'https://5000-professorde-hackerpyhto-zvnlc7adad6.ws-us92.gitpod.io'
+
 exercicios = {
     1: {
         "outputs": [
@@ -76,24 +78,24 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
-def login():
-    df = pd.read_csv('alunos_lp.csv', sep=';')
-    df_search = df[df['Matricula'] == int(request.form['matricula'])]
-    if len(df_search) > 0:
-        session['user_matricula'] = str(df_search['Matricula'].values[0])
-        session['user_nome'] = df_search['Nome'].values[0]
-        return redirect(url_for('submit'))
-    else:
-        return render_template('login.html', message='Número de matrícula não encontrado.')
+    if request.method == 'POST':
+        df = pd.read_csv('alunos_lp.csv', sep=';')
+        df_search = df[df['Matricula'] == int(request.form['matricula'])]
+        if len(df_search) > 0:
+            session['user_matricula'] = str(df_search['Matricula'].values[0])
+            session['user_nome'] = df_search['Nome'].values[0]
+            return redirect(f'{host_path}/submit')
+        else:
+            return render_template('login.html', message='Número de matrícula não encontrado.')
+
+    return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     session.pop('user_matricula', None)
     session.pop('user_nome', None)
-    return redirect(url_for('login'))
+    return redirect(f'{host_path}/')
 
 @app.route('/dashboard')
 def ranking():
