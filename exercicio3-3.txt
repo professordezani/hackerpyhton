@@ -1,1 +1,1 @@
-Como calcular o fatorial de um número
+1

@@ -35,16 +35,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #     }
 # }
 
-host_path = 'https://5000-professorde-hackerpyhto-zvnlc7adad6.ws-us92.gitpod.io'
+host_path = 'https://5000-fatecriopre-projetoeval-h5c4o563abg.ws-us92.gitpod.io'
 
 exercicios = {
     1: {
         "outputs": [
-            "120\n", 
-            "2\n", 
-            "6\n", 
-            "3628800\n", 
-            "87178291200\n"]
+            "777.86\n", 
+            "1555.72\n", 
+            "1187.79222\n", 
+            "5781.05552\n", 
+            "7.00074\n"]
     },
     2: {
         "outputs": [
@@ -56,11 +56,11 @@ exercicios = {
     },
     3: {
         "outputs": [
-            "fatec-rio-preto\n", 
-            "o-meu-primeiro-exercício\n", 
-            "blog-da-super-empresa\n", 
-            "como-calcular-o-fatorial-de-um-número\n", 
-            "saiba-mais-sobre-a-linguagem-python\n"]
+            "1/1 + 2/3 + 3/5 + 4/7 + 5/9 + 6/11\n", 
+            "1/1 + 2/3 + 3/5 + 4/7\n", 
+            "1/1 + 2/3 + 3/5 + 4/7 + 5/9 + 6/11 + 7/13 + 8/15 + 9/17 + 10/19 + 11/21 + 12/23\n", 
+            "1/1\n", 
+            "1/1 + 2/3 + 3/5 + 4/7 + 5/9 + 6/11 + 7/13 + 8/15 + 9/17 + 10/19 + 11/21 + 12/23 + 13/25 + 14/27 + 15/29 + 16/31 + 17/33\n"]
     },
     4: {
         "outputs": [
