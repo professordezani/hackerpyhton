@@ -19,11 +19,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # exercicios = {
 #     1: {
 #         "outputs": [
-#             "Hello World, Henrique Dezani\n", 
-#             "Hello World, Gabriel Dezani\n", 
-#             "Hello World, Thalita Alvarenga\n", 
-#             "Hello World, Adriana Alvarenga\n", 
-#             "Hello World, Gabriel Alvarenga\n"]
 #     },
 #     2: {
 #         "outputs": [
@@ -48,11 +43,11 @@ exercicios = {
     },
     2: {
         "outputs": [
-            "0\n1\n4\n9\n16\n", 
-            "0\n1\n4\n9\n", 
-            "0\n1\n4\n", 
-            "0\n1\n4\n9\n16\n25\n36\n49\n64\n81\n100\n121\n144\n", 
-            "0\n"]
+            "3 centenas, 2 dezenas e 6 unidades\n", 
+            "1 dezena e duas unidades\n", 
+            "3 unidades\n", 
+            "1 centena, 4 dezenas e 1 unidade\n", 
+            "1 unidade\n"]
     },
     3: {
         "outputs": [
