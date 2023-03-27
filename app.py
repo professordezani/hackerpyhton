@@ -30,7 +30,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #     }
 # }
 
-host_path = 'https://5000-fatecriopre-projetoeval-h5c4o563abg.ws-us92.gitpod.io'
+host_path = 'https://5000-professorde-projetotest-m7pvkqphk3q.ws-us92.gitpod.io/'
 
 exercicios = {
     1: {
@@ -44,7 +44,7 @@ exercicios = {
     2: {
         "outputs": [
             "3 centenas, 2 dezenas e 6 unidades\n", 
-            "1 dezena e duas unidades\n", 
+            "1 dezena e 2 unidades\n", 
             "3 unidades\n", 
             "1 centena, 4 dezenas e 1 unidade\n", 
             "1 unidade\n"]
