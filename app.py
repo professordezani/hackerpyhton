@@ -16,20 +16,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# exercicios = {
-#     1: {
-#         "outputs": [
-#     },
-#     2: {
-#         "outputs": [
-#             "1\n", 
-#             "2\n", 
-#             "6\n", 
-#             "24\n", 
-#             "120\n"]
-#     }
-# }
-
 host_path = 'https://5000-fatecriopre-projetotest-kwlhmc5067m.ws-us98.gitpod.io/'
 
 exercicios = {
