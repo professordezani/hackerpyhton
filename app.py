@@ -30,16 +30,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #     }
 # }
 
-host_path = 'https://5000-professorde-projetotest-m7pvkqphk3q.ws-us92.gitpod.io/'
+host_path = 'https://5000-fatecriopre-projetotest-kwlhmc5067m.ws-us98.gitpod.io/'
 
 exercicios = {
     1: {
         "outputs": [
-            "777.86\n", 
-            "1555.72\n", 
-            "1187.79222\n", 
-            "5781.05552\n", 
-            "7.00074\n"]
+            "True\n", 
+            "False\n", 
+            "True\n",
+            "True\n", 
+            "True\n", ]
     },
     2: {
         "outputs": [
@@ -56,14 +56,6 @@ exercicios = {
             "1/1 + 2/3 + 3/5 + 4/7 + 5/9 + 6/11 + 7/13 + 8/15 + 9/17 + 10/19 + 11/21 + 12/23\n", 
             "1/1\n", 
             "1/1 + 2/3 + 3/5 + 4/7 + 5/9 + 6/11 + 7/13 + 8/15 + 9/17 + 10/19 + 11/21 + 12/23 + 13/25 + 14/27 + 15/29 + 16/31 + 17/33\n"]
-    },
-    4: {
-        "outputs": [
-            "[1, 3, 2]\n", 
-            "[6, 5, 10]\n[1, 5, 9, 10]\n[10, 9, 5, 1]\n", 
-            "[3, 2, 1]\n", 
-            "[1, 2, 3]\n", 
-            "[1, 2]\n[1]\n[]\n"]
     }
 }
 

@@ -1,8 +1,0 @@
-7
-anexar 1
-anexar 2
-imprimir
-remover 2
-imprimir
-remover 1
-imprimir
