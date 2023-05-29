@@ -16,7 +16,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-host_path = 'https://5000-fatecriopre-projetotest-kwlhmc5067m.ws-us98.gitpod.io/'
+host_path = 'https://5000-professorde-projetotest-g4fi2n6c30y.ws-us98.gitpod.io/'
 
 exercicios = {
     1: {
